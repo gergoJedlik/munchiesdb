@@ -17,6 +17,7 @@ model Post {
   createdAt   DateTime @default(now())
   userID      String
   User        User     @relation(fields: [userID], references: [id])
+  Image       String   @default("")
 }
 
 model User {
