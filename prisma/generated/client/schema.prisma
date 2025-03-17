@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  postID      String   @id @default(uuid())
+  FoodName    String   @default("Untitled")
+  Desc        String   @default("No description")
+  Nutri       Int?
+  Ingredients String   @default("No ingedients")
+  Ratings     Rating[]
+  createdAt   DateTime @default(now())
+  userID      String
+  User        User     @relation(fields: [userID], references: [id])
+  Image       String   @default("")
+}
+
+model User {
+  id      String   @id @default(cuid())
+  name    String   @unique
+  pass    String
+  Posts   Post[]
+  Ratings Rating[]
+}
+
+model Rating {
+  postID     String
+  userID     String
+  User       User   @relation(fields: [userID], references: [id])
+  Post       Post   @relation(fields: [postID], references: [postID])
+  simplicity Int    @default(0)
+  taste      Int    @default(0)
+  nutrition  Int    @default(0)
+  abundancy  Int    @default(0)
+  texture    Int    @default(0)
+  price      Int    @default(0)
+
+  @@id([postID, userID])
+}

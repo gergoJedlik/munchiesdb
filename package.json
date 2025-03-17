@@ -7,11 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "npx prisma generate"
   },
   "dependencies": {
     "18": "^0.0.0",
-    "@prisma/client": "^6.4.1",
+    "@prisma/client": "^6.5.0",
     "next": "15.1.7",
     "node": "^23.9.0",
     "react": "^19.0.0",
@@ -25,7 +25,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.1.7",
     "postcss": "^8",
-    "prisma": "^6.4.1",
+    "prisma": "^6.5.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
