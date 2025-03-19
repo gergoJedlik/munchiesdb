@@ -49,7 +49,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
             })
         }
 
-        return new NextResponse(user.id, { status: 200, headers: CORS });
+        return new NextResponse(JSON.stringify({ userID: user.id, username: user.name }), { status: 200, headers: CORS });
     }
 
     // ----- ALL USERS -----
