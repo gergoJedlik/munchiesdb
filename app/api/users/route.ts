@@ -24,20 +24,35 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         return new NextResponse(JSON.stringify({ user }), { status: 200, headers: CORS })
     }
 
+    // ----- LOGIN ------
     const username = req.nextUrl.searchParams.get("username");
+    const password = req.nextUrl.searchParams.get("password");
 
-    if (username) {
+    if (username && password) {
         const user = await prisma.user.findUnique({
             where: {
                 name: username,
             }
         });
-        const res = new NextResponse(JSON.stringify({ user }), { status: 200, headers: CORS });
-        if (user) {
-            res.cookies.set("userID", user.id);
+
+        if (!user) {
+            return new NextResponse("User not found", {
+                status: 404,
+                headers: CORS
+            })
         }
-        return res;
+
+        if (password != user.pass) {
+            return new NextResponse("Password incorrect", {
+                status: 404,
+                headers: CORS
+            })
+        }
+
+        return new NextResponse(user.id, { status: 200, headers: CORS });
     }
+
+    // ----- ALL USERS -----
     const users = await prisma.user.findMany();
     return new NextResponse(
         JSON.stringify({ users }),
