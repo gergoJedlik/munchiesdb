@@ -60,8 +60,10 @@ export async function POST(req: NextRequest) {
         prisma.post.create({
             data: {
                 FoodName: post.foodname,
-                Desc: post.desc ? post.desc : "No description",
+                Desc: post.description ? post.description : "No description",
                 Ingredients: post.ingredients ? post.ingredients : "No ingredients",
+                Nutri: post.calories,
+                Image: post.imgLink,
                 userID: post.user
             }
         })
