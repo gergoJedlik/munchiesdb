@@ -57,7 +57,7 @@ export async function OPTIONS(): Promise<NextResponse> {
 export async function POST(req: NextRequest) {
     const post = await req.json()
     try {
-        prisma.post.create({
+        await prisma.post.create({
             data: {
                 FoodName: post.foodname,
                 Desc: post.description ? post.description : "No description",
