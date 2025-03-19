@@ -53,6 +53,32 @@ export async function OPTIONS(): Promise<NextResponse> {
     });
 }
 
+
+export async function POST(req: NextRequest) {
+    const post = await req.json()
+    try {
+        prisma.post.create({
+            data: {
+                FoodName: post.foodname,
+                Desc: post.desc ? post.desc : "No description",
+                Ingredients: post.ingredients ? post.ingredients : "No ingredients",
+                userID: post.user
+            }
+        })
+    } catch (error) {
+        return new NextResponse(JSON.stringify(error), {
+            status: 422,
+            headers: CORS
+        })
+    }
+    return new NextResponse(JSON.stringify(post), {
+        status: 201,
+        headers: CORS
+    })
+}
+
+
+
 async function handleSort(sort: string | null) {
     let data;
     console.log(sort)

@@ -34,7 +34,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         });
         const res = new NextResponse(JSON.stringify({ user }), { status: 200, headers: CORS });
         if (user) {
-            res.cookies.set("user", user.id);
+            res.cookies.set("userID", user.id);
         }
         return res;
     }
@@ -46,4 +46,32 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
             headers: CORS
         }
     )
+}
+
+export async function POST(req: NextRequest) {
+    const user = await req.json()
+    try {
+        prisma.user.create({
+            data: {
+                name: user.username,
+                pass: user.password
+            }
+        })
+    } catch (error) {
+        return new NextResponse(JSON.stringify(error), {
+            status: 422,
+            headers: CORS
+        })
+    }
+    return new NextResponse(JSON.stringify(user), {
+        status: 201,
+        headers: CORS
+    })
+}
+
+export async function OPTIONS(): Promise<NextResponse> {
+    return new NextResponse(null, {
+        status: 200,
+        headers: CORS,
+    });
 }
