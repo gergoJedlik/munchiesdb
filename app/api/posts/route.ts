@@ -57,7 +57,7 @@ export async function OPTIONS(): Promise<NextResponse> {
 export async function POST(req: NextRequest) {
     const post = await req.json()
     try {
-        await prisma.post.create({
+        const createdPost = await prisma.post.create({
             data: {
                 FoodName: post.foodname,
                 Desc: post.description ? post.description : "No description",
@@ -65,6 +65,17 @@ export async function POST(req: NextRequest) {
                 Nutri: post.calories,
                 Image: post.imgLink,
                 userID: post.user
+            }
+        })
+        await prisma.rating.create({
+            data: {
+                taste: post.rating.taste,
+                simplicity: post.rating.simplicity,
+                nutrition: post.rating.nutrition,
+                price: post.rating.price,
+                texture: 0,
+                userID: post.user,
+                postID: createdPost.postID
             }
         })
     } catch (error) {
