@@ -51,7 +51,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 export async function POST(req: NextRequest) {
     const user = await req.json()
     try {
-        prisma.user.create({
+        await prisma.user.create({
             data: {
                 name: user.username,
                 pass: user.password
