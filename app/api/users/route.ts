@@ -52,10 +52,9 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         return new NextResponse(JSON.stringify({ userID: user.id, username: user.name }), { status: 200, headers: CORS });
     }
 
-    // ----- ALL USERS -----
-    const users = await prisma.user.findMany();
+    // ----- ALL USERS ----- (deleted)
     return new NextResponse(
-        JSON.stringify({ users }),
+        "No query",
         {
             status: 200,
             headers: CORS
