@@ -130,6 +130,7 @@ async function handleSort(sort: string | null) {
                     FoodName: "desc"
                 }
             })
+            break;
         case "popular":
             data = await prisma.post.findMany({
                 include: {
