@@ -101,7 +101,7 @@ async function handleSort(sort: string | null) {
     let data;
     console.log(sort)
     switch (sort) {
-        case "alpabet":
+        case "alphabet":
             data = await prisma.post.findMany({
                 include: {
                     Ratings: true,
