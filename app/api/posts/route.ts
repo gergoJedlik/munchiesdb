@@ -21,7 +21,12 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
             },
             include: {
                 Ratings: true,
-                User: true
+                User: {
+                    select: {
+                        name: true,
+                        id: true
+                    }
+                }
             }
         });
         return new NextResponse(
@@ -96,14 +101,18 @@ async function handleSort(sort: string | null) {
     let data;
     console.log(sort)
     switch (sort) {
-        case "basic":
+        case "alpabet":
             data = await prisma.post.findMany({
                 include: {
                     Ratings: true,
-                    User: true
+                    User: {
+                        select: {
+                            name: true
+                        }
+                    }
                 },
                 orderBy: {
-                    postID: "asc"
+                    FoodName: "asc"
                 }
             })
             break;
@@ -111,17 +120,25 @@ async function handleSort(sort: string | null) {
             data = await prisma.post.findMany({
                 include: {
                     Ratings: true,
-                    User: true
+                    User: {
+                        select: {
+                            name: true
+                        }
+                    }
                 },
                 orderBy: {
-                    postID: "desc"
+                    FoodName: "desc"
                 }
             })
         case "popular":
             data = await prisma.post.findMany({
                 include: {
                     Ratings: true,
-                    User: true
+                    User: {
+                        select: {
+                            name: true
+                        }
+                    }
                 },
                 orderBy: {
                     Ratings: {
@@ -134,7 +151,11 @@ async function handleSort(sort: string | null) {
             data = await prisma.post.findMany({
                 include: {
                     Ratings: true,
-                    User: true
+                    User: {
+                        select: {
+                            name: true
+                        }
+                    }
                 },
                 orderBy: {
                     createdAt: "desc"
@@ -145,7 +166,11 @@ async function handleSort(sort: string | null) {
             data = await prisma.post.findMany({
                 include: {
                     Ratings: true,
-                    User: true
+                    User: {
+                        select: {
+                            name: true
+                        }
+                    }
                 },
                 orderBy: {
                     createdAt: "asc"
@@ -156,7 +181,11 @@ async function handleSort(sort: string | null) {
             data = await prisma.post.findMany({
                 include: {
                     Ratings: true,
-                    User: true
+                    User: {
+                        select: {
+                            name: true
+                        }
+                    }
                 }
             })
             break;
