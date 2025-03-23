@@ -38,6 +38,32 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         );
     }
 
+    const userID = req.nextUrl.searchParams.get("userID");
+    // in future sorting maybe
+    if (userID) {
+        const data = await prisma.post.findMany({
+            where: {
+                userID: userID
+            },
+            include: {
+                Ratings: true,
+                User: {
+                    select: {
+                        name: true,
+                        id: true
+                    }
+                }
+            },
+            orderBy: {
+                createdAt: "desc"
+            }
+        });
+        return new NextResponse(JSON.stringify(data), {
+            status: 200,
+            headers: CORS
+        })
+    }
+
     const sort = req.nextUrl.searchParams.get("sort");
     const data = await handleSort(sort);
     const response = new NextResponse(
