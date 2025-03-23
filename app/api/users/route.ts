@@ -17,11 +17,12 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
             where: {
                 id: userID
             },
-            include: {
-                Posts: true
+            select: {
+                name: true,
+                id: true
             }
         });
-        return new NextResponse(JSON.stringify({ user }), { status: 200, headers: CORS })
+        return new NextResponse(JSON.stringify(user), { status: 200, headers: CORS })
     }
 
     // ----- LOGIN ------
