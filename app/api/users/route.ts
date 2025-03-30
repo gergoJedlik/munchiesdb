@@ -1,5 +1,6 @@
 import prisma from "@/lib/db";
 import { NextRequest, NextResponse } from 'next/server';
+import bcrypt from "bcrypt";
 
 const CORS = {
     'Content-Type': 'application/json',
@@ -7,6 +8,16 @@ const CORS = {
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Allow-Credentials': 'true',
+}
+
+async function encryptPass(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt(8);
+    const hashedPass = await bcrypt.hash(password, salt);
+    return hashedPass
+}
+
+async function verifyPass(inputPass: string, hashedPass: string) {
+    return await bcrypt.compare(inputPass, hashedPass);
 }
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
@@ -43,7 +54,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
             })
         }
 
-        if (password != user.pass) {
+        if (!await verifyPass(password, user.pass)) {
             return new NextResponse("Password incorrect", {
                 status: 404,
                 headers: CORS
@@ -69,7 +80,7 @@ export async function POST(req: NextRequest) {
         await prisma.user.create({
             data: {
                 name: user.username,
-                pass: user.password
+                pass: await encryptPass(user.password)
             }
         })
     } catch (error) {
@@ -78,7 +89,7 @@ export async function POST(req: NextRequest) {
             headers: CORS
         })
     }
-    return new NextResponse(JSON.stringify(user), {
+    return new NextResponse("No errors during register", {
         status: 201,
         headers: CORS
     })
