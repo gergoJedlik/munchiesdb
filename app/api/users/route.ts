@@ -11,7 +11,7 @@ const CORS = {
 }
 
 async function encryptPass(password: string): Promise<string> {
-    const salt = await bcrypt.genSalt(8);
+    const salt = await bcrypt.genSalt(10);
     const hashedPass = await bcrypt.hash(password, salt);
     return hashedPass
 }
