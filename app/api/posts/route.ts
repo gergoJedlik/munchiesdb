@@ -82,7 +82,7 @@ export async function PATCH(req: NextRequest) {
 
     const postID = req.nextUrl.searchParams.get("postID");
     const userID = req.nextUrl.searchParams.get("userID");
-    const Fav = req.nextUrl.searchParams.get("Fav");
+    const Fav = req.nextUrl.searchParams.get("fav");
 
     if (postID && userID && Fav == "add") {
         await prisma.post.update({
@@ -104,6 +104,14 @@ export async function PATCH(req: NextRequest) {
             }
         })
         return new NextResponse("deleted from favourites", { status: 200, headers: CORS })
+    } else if (postID && userID && Fav == "check") {
+        const log = await prisma.post.findFirst({
+            where: {
+                postID: postID,
+                favouritedBy: { some: { id: userID } }
+            }
+        })
+        return new NextResponse(log ? "true" : "false", { status: 200, headers: CORS })
     }
 }
 
