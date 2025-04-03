@@ -78,7 +78,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     return response;
 }
 
-export async function UPDATE(req: NextRequest) {
+export async function PATCH(req: NextRequest) {
 
     const postID = req.nextUrl.searchParams.get("postID");
     const userID = req.nextUrl.searchParams.get("userID");
