@@ -11,32 +11,7 @@ const CORS = {
 }
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
-
     const postID = req.nextUrl.searchParams.get("postID");
-    const userID = req.nextUrl.searchParams.get("userID");
-    const Fav = req.nextUrl.searchParams.get("Fav");
-
-    if (postID && userID && Fav == "add") {
-        await prisma.post.update({
-            where: {
-                postID: postID,
-            },
-            data: {
-                favouritedBy: { connect: { id: userID } }
-            }
-        })
-        return new NextResponse("favourited", { status: 200, headers: CORS })
-    } else if (postID && userID && Fav == "del") {
-        await prisma.post.update({
-            where: {
-                postID: postID,
-            },
-            data: {
-                favouritedBy: { delete: { id: userID } }
-            }
-        })
-        return new NextResponse("deleted from favourites", { status: 200, headers: CORS })
-    }
 
     if (postID) {
         const data = await prisma.post.findUnique({
@@ -62,6 +37,8 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         );
     }
 
+
+    const userID = req.nextUrl.searchParams.get("userID");
 
     // in future sorting maybe
     if (userID) {
@@ -99,6 +76,35 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     );
 
     return response;
+}
+
+export async function UPDATE(req: NextRequest) {
+
+    const postID = req.nextUrl.searchParams.get("postID");
+    const userID = req.nextUrl.searchParams.get("userID");
+    const Fav = req.nextUrl.searchParams.get("Fav");
+
+    if (postID && userID && Fav == "add") {
+        await prisma.post.update({
+            where: {
+                postID: postID,
+            },
+            data: {
+                favouritedBy: { connect: { id: userID } }
+            }
+        })
+        return new NextResponse("favourited", { status: 200, headers: CORS })
+    } else if (postID && userID && Fav == "del") {
+        await prisma.post.update({
+            where: {
+                postID: postID,
+            },
+            data: {
+                favouritedBy: { delete: { id: userID } }
+            }
+        })
+        return new NextResponse("deleted from favourites", { status: 200, headers: CORS })
+    }
 }
 
 export async function OPTIONS(): Promise<NextResponse> {
