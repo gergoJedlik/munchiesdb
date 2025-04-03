@@ -22,6 +22,20 @@ async function verifyPass(inputPass: string, hashedPass: string) {
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
     const userID = req.nextUrl.searchParams.get("userID");
+    const getFavourites = req.nextUrl.searchParams.get("favs");
+
+    if (userID && getFavourites) {
+        const favs = await prisma.post.findMany({
+            where: {
+                favouritedBy: {
+                    some: {
+                        id: userID
+                    }
+                }
+            }
+        });
+        return new NextResponse(JSON.stringify(favs), { status: 200, headers: CORS });
+    }
 
     if (userID) {
         const user = await prisma.user.findUnique({
